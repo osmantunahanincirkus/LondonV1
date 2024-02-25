@@ -1,4 +1,6 @@
-﻿namespace London.Api.Models.Responses;
+﻿using System.Text.Json.Serialization;
+
+namespace London.Api.Models.Responses;
 
 public sealed class UserOutput
 {
@@ -10,10 +12,13 @@ public sealed class UserOutput
 
 public sealed class LoginResponseModel
 {
-	public required string Username { get; set; }
-	public required string AccessToken { get; set; }
+    [JsonIgnore]
+    public int UserId { get; set; }
+    public required string Username { get; set; }
+    public required string AccessToken { get; set; }
+    public int TokenExpiredTime { get; set; }
+    public string RefreshToken { get; set; }
 
-	public required int Id { get; set; }
-	
-	// TODO: add refresh token 
+
+    // TODO: add refresh token 
 }

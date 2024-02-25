@@ -18,7 +18,7 @@ public class LoginTest
 
     public LoginTest()
     {
-        _controller = new UserController(_userServiceMock.Object, _jwtServiceMock.Object);
+        _controller = new UserController(_userServiceMock.Object);
     }
 
     [Fact]

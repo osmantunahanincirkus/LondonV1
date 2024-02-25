@@ -17,7 +17,7 @@ public class SignUpTest
 
     public SignUpTest()
     {
-        _controller = new UserController(_userServiceMock.Object, null);
+        _controller = new UserController(_userServiceMock.Object);
     }
 
     [Fact]
@@ -26,10 +26,10 @@ public class SignUpTest
         // Arrange
         var signUpRequest = new SignUpRequestModel { Username = "newUser", Password = "password" };
         var user = new User { Id = 1, Username = "newUser" };
-        _userServiceMock.Setup(x => x.SignUp(signUpRequest))
-        .ReturnsAsync(signUpRequest());
-        //_userServiceMock.Setup(service => service.SignUp(signUpRequest)).Return
-        
+        _userServiceMock
+            .Setup(x => x.SignUp(signUpRequest))
+            .ReturnsAsync(user);
+
 
         // Act
         var result = await _controller.SignUp(signUpRequest);
@@ -50,6 +50,5 @@ public class SignUpTest
         var result = await _controller.SignUp(signUpRequest);
 
         // Assert
-        
     }
 }

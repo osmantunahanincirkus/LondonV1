@@ -10,28 +10,20 @@ namespace London.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class UserController(
-    IUserService userService,
-    IJwtService jwtService
+    IUserService userService
 ) : ControllerBase
 {
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequestModel body)
     {
-        //var token = jwtService.GenerateToken(11, "Selman");
-
-        //return Ok(token);
-        
-        var user = await userService.Login(body);
-        
-        if (user == null)
+        var response = await userService.Login(body);
+        if (response == null)
         {
-             return Unauthorized("Invalid username or password.");
+            return Unauthorized("Invalid username or password.");
         }
-        
-        var token = jwtService.GenerateToken(user.Id, user.Username);
-        
-        return Ok(new { AccessToken = token });
+
+        return Ok(response);
     }
 
 
@@ -39,6 +31,6 @@ public class UserController(
     [AllowAnonymous]
     public async Task<IActionResult> SignUp([FromBody] SignUpRequestModel body)
     {
-        return Ok(await userService.signUp(body));
+        return Ok(await userService.SignUp(body));
     }
 }

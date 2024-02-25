@@ -38,8 +38,23 @@
     <None Remove="Models\" />
     <None Remove="Services\" />
     <None Remove="Input\" />
+    <None Remove="London.Test\**" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="London.Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="London.Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="London.Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="London.Test\obj\London.Test.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="London.Test\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="London.Test\obj\project.packagespec.json" />
   </ItemGroup>
 </Project>

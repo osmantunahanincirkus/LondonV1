@@ -16,10 +16,10 @@ public sealed class UserService(IJwtService jwtService, MyDBContext myDbContext)
         if (user == null) throw new HttpResponseException(HttpStatusCode.NotFound, "User Not Found");
 
         var token = jwtService.GenerateToken(user.Id, user.Username);
-        return new LoginResponseModel { Username = user.Username, AccessToken = token, Id = user.Id};
+        return new LoginResponseModel { Username = user.Username, AccessToken = token, UserId = user.Id};
     }
 
-    public async Task<User> signUp(SignUpRequestModel body)
+    public async Task<User> SignUp(SignUpRequestModel body)
     {
         var user = new User
         {
@@ -31,15 +31,5 @@ public sealed class UserService(IJwtService jwtService, MyDBContext myDbContext)
         await myDbContext.Users.AddAsync(user);
         await myDbContext.SaveChangesAsync();
         return user;
-    }
-
-    public void SignUp(SignUpRequestModel signUpRequest)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SignUpAsync(SignUpRequestModel signUpRequest)
-    {
-        throw new NotImplementedException();
     }
 }

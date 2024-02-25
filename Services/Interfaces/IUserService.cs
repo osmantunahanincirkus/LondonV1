@@ -7,7 +7,5 @@ namespace London.Api.Services.Interfaces;
 public interface IUserService
 {
     Task<LoginResponseModel> Login(LoginRequestModel body);
-    Task<User> signUp(SignUpRequestModel body);
-    void SignUp(SignUpRequestModel signUpRequest);
-    void SignUpAsync(SignUpRequestModel signUpRequest);
+    Task<User> SignUp(SignUpRequestModel body);
 }
