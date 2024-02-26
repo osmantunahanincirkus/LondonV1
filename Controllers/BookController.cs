@@ -1,58 +1,52 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using London.Api.Models.Entities;
 using London.Api.Models.Requests;
 using London.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace London.Api.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class BookController : ControllerBase
+namespace London.Api.Controllers
 {
-    // POST: API_URL/books
-    [HttpPost]
-    public async Task<IActionResult> AddBook([FromBody] BookRequestModel model)
+    [ApiController]
+    [Route("[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class BookController : ControllerBase
     {
-        // var currentUser = HttpContext.User;
-        // var name = currentUser.FindFirst(x => x.Type == ClaimTypes.NameIdentifier)!.Value;
+        private readonly IBookService _bookService;
 
-        var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
-        var username = HttpContext.User.GetPrincipal(ClaimTypes.Name);
-
-        // Gelen modelin doğruluğunu kontrol et
-        if (model == null || string.IsNullOrEmpty(model.BookName) || string.IsNullOrEmpty(model.AuthorName))
+        public BookController(IBookService bookService)
         {
-            return BadRequest("BookName and AuthorName are required fields.");
+            _bookService = bookService;
         }
 
-        // Kullanıcıya ait bir kitap ekleyin
-        var book = new Book
+        // POST: API_URL/books
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] BookRequestModel model)
         {
-            Name = model.BookName,
-            Author = model.AuthorName,
-            User = model.UserId
-        };
+            var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
+            var username = HttpContext.User.GetPrincipal(ClaimTypes.Name);
 
-        // userId
+            if (model == null || string.IsNullOrEmpty(model.BookName) || string.IsNullOrEmpty(model.AuthorName))
+            {
+                return BadRequest("BookName and AuthorName are required fields.");
+            }
 
-        // _context.Books.Add(book);
-        // await _context.SaveChangesAsync();
+            var addedBook = await _bookService.AddBookAsync(model, userId);
 
-        return Ok(book); // Eklenen kitabı yanıt olarak döndür
-    }
+            return Ok(addedBook);
+        }
 
-    // GET: API_URL/books
-    [HttpGet]
-    public async Task<IActionResult> GetBooks(int userId)
-    {
-        // UserId'ye göre kullanıcının okuduğu kitapları listele
-        // var userBooks = await _context.Books.ToListAsync();
+        // GET: API_URL/books
+        [HttpGet]
+        public async Task<IActionResult> GetBooks()
+        {
+            var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
 
-        return Ok(HttpContext.User);
+            var userBooks = await _bookService.GetBooksByUserIdAsync(userId);
+
+            return Ok(userBooks);
+        }
     }
 }
