@@ -18,6 +18,21 @@ namespace London.Api.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("BookUser", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("BookUser");
+                });
+
             modelBuilder.Entity("London.Api.Models.Entities.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -25,19 +40,12 @@ namespace London.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Books", (string)null);
                 });
@@ -49,19 +57,15 @@ namespace London.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -69,20 +73,19 @@ namespace London.Api.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("London.Api.Models.Entities.Book", b =>
+            modelBuilder.Entity("BookUser", b =>
                 {
-                    b.HasOne("London.Api.Models.Entities.User", "User")
-                        .WithMany("Books")
-                        .HasForeignKey("UserId")
+                    b.HasOne("London.Api.Models.Entities.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("London.Api.Models.Entities.User", b =>
-                {
-                    b.Navigation("Books");
+                    b.HasOne("London.Api.Models.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

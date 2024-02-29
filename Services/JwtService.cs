@@ -42,7 +42,6 @@ public sealed class JwtService : IJwtService
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        var jwtToken = tokenHandler.WriteToken(token);
         return tokenHandler.WriteToken(token);
     }
 }

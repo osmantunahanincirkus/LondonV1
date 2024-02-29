@@ -1,52 +1,38 @@
 ﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using London.Api.Models.Entities;
 using London.Api.Models.Requests;
 using London.Api.Services;
+using London.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace London.Api.Controllers
+namespace London.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class BookController(IBookService bookService) : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class BookController : ControllerBase
+    [HttpPost]
+    public async Task<IActionResult> AddBook([FromBody] BookRequestModel model)
     {
-        private readonly IBookService _bookService;
-
-        public BookController(IBookService bookService)
+        if (model == null || string.IsNullOrEmpty(model.BookName) || string.IsNullOrEmpty(model.AuthorName))
         {
-            _bookService = bookService;
+            return BadRequest("BookName and AuthorName are required fields.");
         }
 
-        // POST: API_URL/books
-        [HttpPost]
-        public async Task<IActionResult> AddBook([FromBody] BookRequestModel model)
-        {
-            var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
-            var username = HttpContext.User.GetPrincipal(ClaimTypes.Name);
+        var addedBook = await bookService.AddBookAsync(model);
 
-            if (model == null || string.IsNullOrEmpty(model.BookName) || string.IsNullOrEmpty(model.AuthorName))
-            {
-                return BadRequest("BookName and AuthorName are required fields.");
-            }
+        return Ok(addedBook);
+    }
 
-            var addedBook = await _bookService.AddBookAsync(model, userId);
+    [HttpGet]
+    public async Task<IActionResult> GetBooks()
+    {
+        var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
 
-            return Ok(addedBook);
-        }
+        var userBooks = await bookService.GetBooksByUserIdAsync(Convert.ToInt32(userId));
 
-        // GET: API_URL/books
-        [HttpGet]
-        public async Task<IActionResult> GetBooks()
-        {
-            var userId = HttpContext.User.GetPrincipal(ClaimTypes.NameIdentifier);
-
-            var userBooks = await _bookService.GetBooksByUserIdAsync(userId);
-
-            return Ok(userBooks);
-        }
+        return Ok(userBooks);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace London.Api.Services.Interfaces;
+﻿namespace London.Api.Services.Interfaces;
 
 public interface IJwtService
 {

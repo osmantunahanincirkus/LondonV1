@@ -7,5 +7,5 @@ public class User
 	public string Password { get; set; }
 	public string Name { get; set; }
 	public string Surname { get; set; }
-    public ICollection<Book> Books { get; } = new List<Book>();
+	public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 }

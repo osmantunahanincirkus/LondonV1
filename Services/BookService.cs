@@ -1,47 +1,33 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using London.Api.Models;
 using London.Api.Models.Entities;
 using London.Api.Models.Requests;
+using Microsoft.EntityFrameworkCore;
+using London.Api.Services.Interfaces;
 
-namespace London.Api.Services
+namespace London.Api.Services;
+
+public sealed class BookService(MyDBContext context) : IBookService
 {
-    public interface IBookService
+    public async Task<Book> AddBookAsync(BookRequestModel model)
     {
-        Task<Book> AddBookAsync(BookRequestModel model, string userId);
-        Task<List<Book>> GetBooksByUserIdAsync(string userId);
+        var book = new Book
+        {
+            Name = model.BookName,
+            Author = model.AuthorName
+        };
+
+        context.Books.Add(book);
+        await context.SaveChangesAsync();
+
+        return book;
     }
 
-    public class BookService : IBookService
+    public async Task<List<Book>> GetBooksByUserIdAsync(int userId)
     {
-        private readonly ChallengeDbContext _context;
+        var userBooks = await context.Books.Include(x => x.Users)
+            .Where(b => b.Users.Any(y => y.Id == userId))
+            .ToListAsync();
 
-        public BookService(ChallengeDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<Book> AddBookAsync(BookRequestModel model, string userId)
-        {
-            var book = new Book
-            {
-                Name = model.BookName,
-                Author = model.AuthorName,
-                UserId = userId
-            };
-
-            _context.Books.Add(book);
-            await _context.SaveChangesAsync();
-
-            return book;
-        }
-
-        public async Task<List<Book>> GetBooksByUserIdAsync(string userId)
-        {
-            var userBooks = await _context.Books
-                .Where(b => b.UserId == userId)
-                .ToListAsync();
-
-            return userBooks;
-        }
+        return userBooks;
     }
 }

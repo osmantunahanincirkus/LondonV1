@@ -12,7 +12,6 @@ public class MyDBContext : DbContext
     public DbSet<Book> Books { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // User tablosu için gerekli ayarlamalar
         modelBuilder.Entity<User>().ToTable("Users");
         modelBuilder.Entity<Book>().ToTable("Books");
     }

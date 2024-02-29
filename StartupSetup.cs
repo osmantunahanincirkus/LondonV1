@@ -1,6 +1,4 @@
-﻿using London.Api;
-using London.Api.Models;
-using London.Api.Models.Entities;
+﻿using London.Api.Models;
 using London.Api.Services;
 using London.Api.Services.Interfaces;
 using London.Api.Settings;
@@ -8,18 +6,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 
 public static class StartupSetup
 {
-    // Bu metod, hizmetlerin yapılandırılması için kullanılır.
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // IJwtService arabirimini uygulayan JwtService sınıfını ekleyin
         services.AddTransient<IJwtService, JwtService>();
         services.AddTransient<IUserService, UserService>();
-
+        services.AddTransient<IBookService, BookService>();
 
         services.AddDbContext<MyDBContext>
         (options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"),

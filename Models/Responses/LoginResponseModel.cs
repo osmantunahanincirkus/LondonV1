@@ -16,9 +16,4 @@ public sealed class LoginResponseModel
     public int UserId { get; set; }
     public required string Username { get; set; }
     public required string AccessToken { get; set; }
-    public int TokenExpiredTime { get; set; }
-    public string RefreshToken { get; set; }
-
-
-    // TODO: add refresh token 
 }

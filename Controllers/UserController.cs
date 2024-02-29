@@ -3,15 +3,12 @@ using London.Api.Models.Requests;
 using London.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace London.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(
-    IUserService userService
-) : ControllerBase
+public class UserController(IUserService userService) : ControllerBase
 {
     [HttpPost("login")]
     [AllowAnonymous]
@@ -22,10 +19,8 @@ public class UserController(
         {
             return Unauthorized("Invalid username or password.");
         }
-
         return Ok(response);
     }
-
 
     [HttpPost("sign-up")]
     [AllowAnonymous]

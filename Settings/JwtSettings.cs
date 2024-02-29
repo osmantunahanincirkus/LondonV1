@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace London.Api.Settings;
+﻿namespace London.Api.Settings;
 
 public class JwtSettings
 {
     public const string ConfigName = "JwtSettings";
-
     public required string Issuer { get; init; }
     public required string Audience { get; init; }
     public required string IssuerSigningKey { get; init; }
