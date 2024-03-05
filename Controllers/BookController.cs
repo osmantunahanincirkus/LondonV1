@@ -16,11 +16,6 @@ public class BookController(IBookService bookService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddBook([FromBody] BookRequestModel model)
     {
-        if (model == null || string.IsNullOrEmpty(model.BookName) || string.IsNullOrEmpty(model.AuthorName))
-        {
-            return BadRequest("BookName and AuthorName are required fields.");
-        }
-
         var addedBook = await bookService.AddBookAsync(model);
 
         return Ok(addedBook);
@@ -34,5 +29,13 @@ public class BookController(IBookService bookService) : ControllerBase
         var userBooks = await bookService.GetBooksByUserIdAsync(Convert.ToInt32(userId));
 
         return Ok(userBooks);
+    }
+    
+    [HttpPost("AddBookToUser")]
+    public async Task<IActionResult> AddBookToUser([FromBody] BookRequestModel model)
+    {
+        var addedBook = await bookService.AddBookToUserAsync(model);
+
+        return Ok(addedBook);
     }
 }

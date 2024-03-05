@@ -1,11 +1,12 @@
 ﻿namespace London.Api.Models.Entities;
 
-public class User
+public class Users
 {
 	public int Id { get; set; }
 	public string Username { get; set; }
 	public string Password { get; set; }
 	public string Name { get; set; }
 	public string Surname { get; set; }
-	public virtual ICollection<Book> Books { get; set; } = new List<Book>();
+	public virtual ICollection<UsersToBooks> UsersToBooks { get; set; } = new List<UsersToBooks>();
+
 }

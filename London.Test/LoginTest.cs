@@ -28,7 +28,7 @@ public class LoginTest
             AccessToken = "fakeToken",
             Username = "validUser"
         };
-        _userServiceMock.Setup(service => service.Login(loginRequest)).ReturnsAsync(loginResponse);
+        _userServiceMock.Setup(service => service.LoginAsync(loginRequest)).ReturnsAsync(loginResponse);
 
         var result = await _controller.Login(loginRequest);
 
@@ -40,7 +40,7 @@ public class LoginTest
     public async Task Login_Should_Return_Unauthorized_For_Invalid_Username()
     {
         var invalidLoginRequest = new LoginRequestModel { Username = "invalidUser", Password = "anyPassword" };
-        _userServiceMock.Setup(service => service.Login(invalidLoginRequest)).ReturnsAsync((LoginResponseModel)null);
+        _userServiceMock.Setup(service => service.LoginAsync(invalidLoginRequest)).ReturnsAsync((LoginResponseModel)null);
 
         var result = await _controller.Login(invalidLoginRequest);
 
@@ -51,7 +51,7 @@ public class LoginTest
     public async Task Login_Should_Return_Unauthorized_For_Wrong_Password()
     {
         var wrongPasswordRequest = new LoginRequestModel { Username = "validUser", Password = "wrongPassword" };
-        _userServiceMock.Setup(service => service.Login(wrongPasswordRequest)).ReturnsAsync((LoginResponseModel)null);
+        _userServiceMock.Setup(service => service.LoginAsync(wrongPasswordRequest)).ReturnsAsync((LoginResponseModel)null);
 
         var result = await _controller.Login(wrongPasswordRequest);
 

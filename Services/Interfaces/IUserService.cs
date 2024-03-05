@@ -6,6 +6,6 @@ namespace London.Api.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<LoginResponseModel> Login(LoginRequestModel body);
-    Task<User> SignUp(SignUpRequestModel body);
+    Task<LoginResponseModel> LoginAsync(LoginRequestModel body);
+    Task<Users> SignUp(SignUpRequestModel body);
 }

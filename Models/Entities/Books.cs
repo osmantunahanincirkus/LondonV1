@@ -1,9 +1,9 @@
 ﻿namespace London.Api.Models.Entities;
 
-public class Book
+public class Books
 {
     public int Id { get; set; }
 	public string Name { get; set; }
 	public string Author { get; set; }
-	public virtual ICollection<User> Users { get; set; } = new List<User>();
+	public virtual ICollection<UsersToBooks> UsersToBooks { get; set; } = new List<UsersToBooks>();
 }

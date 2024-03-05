@@ -1,7 +1,11 @@
-﻿namespace London.Api.Models.Requests;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace London.Api.Models.Requests;
 
 public class BookRequestModel
 {
-	public string BookName { get; set; }
-	public string AuthorName { get; set; }
+	[MaxLength(200)]
+	public required string BookName { get; set; }
+	public required string AuthorName { get; set; }
+	public int UserId { get; set; }
 }

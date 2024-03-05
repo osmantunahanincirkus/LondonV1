@@ -5,23 +5,34 @@ using London.Api.Models.Responses;
 using London.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
 
 namespace London.Api.Services;
 
-public sealed class UserService(IJwtService jwtService, MyDBContext myDbContext) : IUserService
+public class InClassName
 {
-    public async Task<LoginResponseModel> Login(LoginRequestModel body)
+    public InClassName(LoginRequestModel body)
     {
-        var user = await myDbContext.Users.FirstOrDefaultAsync(u => u.Username == body.Username);
-        if (user == null) throw new HttpResponseException(HttpStatusCode.NotFound, "User Not Found");
-
-        var token = jwtService.GenerateToken(user.Id, user.Username);
-        return new LoginResponseModel { Username = user.Username, AccessToken = token, UserId = user.Id};
+        Body = body;
     }
 
-    public async Task<User> SignUp(SignUpRequestModel body)
+    public LoginRequestModel Body { get; private set; }
+}
+
+public sealed class UserService(IJwtService jwtService, MyDBContext myDbContext) : IUserService
+{
+    public async Task<LoginResponseModel> LoginAsync(LoginRequestModel body)
     {
-        var user = new User
+        var user = await myDbContext.Users.FirstOrDefaultAsync(u => u.Username == body.Username && u.Password == body.Password);
+        if (user == null) throw new HttpResponseException(HttpStatusCode.NotFound, "User Not Found");
+        
+        var token = jwtService.GenerateToken(user.Id, user.Username);
+        return new LoginResponseModel { Username = user.Username, AccessToken = token};
+    }
+
+    public async Task<Users> SignUp(SignUpRequestModel body)
+    {
+        var user = new Users
         {
             Name = body.Name,
             Surname = body.Surname,

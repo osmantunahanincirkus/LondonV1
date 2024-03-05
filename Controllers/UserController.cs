@@ -8,13 +8,13 @@ namespace London.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class UserController(IUserService userService) : ControllerBase
 {
     [HttpPost("login")]
-    [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequestModel body)
     {
-        var response = await userService.Login(body);
+        var response = await userService.LoginAsync(body);
         if (response == null)
         {
             return Unauthorized("Invalid username or password.");
@@ -23,7 +23,6 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpPost("sign-up")]
-    [AllowAnonymous]
     public async Task<IActionResult> SignUp([FromBody] SignUpRequestModel body)
     {
         return Ok(await userService.SignUp(body));

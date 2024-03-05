@@ -16,16 +16,16 @@ public static class StartupSetup
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IBookService, BookService>();
 
-        services.AddDbContext<MyDBContext>
+        services.AddDbContextPool<MyDBContext>
         (options => options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
             new MySqlServerVersion(new Version())));
-
-        var jwtSettings = configuration.GetSection(JwtSettings.ConfigName).Get<JwtSettings>()!;
 
         services.AddOptions<JwtSettings>()
             .BindConfiguration(JwtSettings.ConfigName)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        
+        var jwtSettings = configuration.GetSection(JwtSettings.ConfigName).Get<JwtSettings>()!;
 
         services.AddAuthentication(options =>
             {
@@ -50,7 +50,7 @@ public static class StartupSetup
 
         services.AddSwaggerGen(opt =>
         {
-            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "London", Version = "V1" });
             opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,

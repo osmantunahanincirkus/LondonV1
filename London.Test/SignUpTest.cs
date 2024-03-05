@@ -22,7 +22,7 @@ public class SignUpTest
     public async Task SignUp_Should_Return_Ok_For_Successful_Registration()
     {
         var signUpRequest = new SignUpRequestModel { Username = "newUser", Password = "password" };
-        var user = new User { Id = 1, Username = "newUser" };
+        var user = new Users { Id = 1, Username = "newUser" };
         _userServiceMock
             .Setup(x => x.SignUp(signUpRequest))
             .ReturnsAsync(user);
@@ -37,7 +37,7 @@ public class SignUpTest
     public async Task SignUp_Should_Return_Conflict_For_Already_Registered_User()
     {
         var signUpRequest = new SignUpRequestModel { Username = "existingUser", Password = "password" };
-        _userServiceMock.Setup(service => service.SignUp(signUpRequest)).ReturnsAsync((User)null);
+        _userServiceMock.Setup(service => service.SignUp(signUpRequest)).ReturnsAsync((Users)null);
 
         var result = await _controller.SignUp(signUpRequest);
     }
